@@ -1,0 +1,5 @@
+#!/bin/python3
+
+Import('env')
+
+env.add_sources(env.sources, 'shader.cpp')
