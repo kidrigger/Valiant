@@ -1,4 +1,7 @@
 
+#ifndef _MAIN_HPP
+#define _MAIN_HPP
+
 #include <glad/glad.h>
 
 #include <GLFW/glfw3.h>
@@ -6,13 +9,21 @@
 
 #include <shader/shader.hpp>
 
+/*
+ * Main Application class
+ * Basically an overarching class that defines the entire
+ * configuration and usage of the application.
+ */
+
 class MainApp {
 
 	GLFWwindow* m_Window;
 
 	void InitWindow();
 	void LoadOpenGL();
+	void Setup();
 	void MainLoop();
+	void Teardown();
 	void Cleanup();
 
 public:
@@ -22,11 +33,14 @@ public:
 	void run() {
 		InitWindow();
 		LoadOpenGL();
+		Setup();
 		MainLoop();
+		Teardown();
 		Cleanup();
 	}
 };
 
+// Initialize window in GLFW
 void MainApp::InitWindow() {
 
 	glfwInit();
@@ -45,6 +59,7 @@ void MainApp::InitWindow() {
 	glfwMakeContextCurrent(m_Window);
 }
 
+// Load OpenGL using GLFW
 void MainApp::LoadOpenGL() {
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -52,6 +67,7 @@ void MainApp::LoadOpenGL() {
 	}
 }
 
+// Main Gameloop
 void MainApp::MainLoop() {
 
 	while (!glfwWindowShouldClose(m_Window)) {
@@ -59,8 +75,11 @@ void MainApp::MainLoop() {
 	}
 }
 
+// Cleanup part to delete everythin what has been created.
 void MainApp::Cleanup() {
 
 	glfwDestroyWindow(m_Window);
 	glfwTerminate();
 }
+
+#endif /* _MAIN_HPP */
