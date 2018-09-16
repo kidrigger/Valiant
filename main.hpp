@@ -7,6 +7,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
+#include <chrono>
 #include <shader/shader.hpp>
 
 /*
@@ -15,14 +16,40 @@
  * configuration and usage of the application.
  */
 
+class Time {
+	using hr_clock = std::chrono::high_resolution_clock;
+
+public:
+	uint64_t prevFrame;
+	uint64_t currFrame;
+	float	deltaTime;
+
+	void Init() {
+		currFrame = hr_clock::now().time_since_epoch().count();
+	}
+
+	void Update() {
+		prevFrame = currFrame;
+		currFrame = hr_clock::now().time_since_epoch().count();
+		deltaTime = static_cast<float>((currFrame - prevFrame) / 1000000000.0f);
+		if (deltaTime > 1.0f) {
+			deltaTime = 1.0f / 60.0f;
+		}
+	}
+};
+
 class MainApp {
 
-	GLFWwindow* m_Window;
+	GLFWwindow*  m_Window;
+	Time		 m_Timer;
+	ShaderLoader m_ShaderLoader;
 
-	void InitWindow();
+	void
+	InitWindow();
 	void LoadOpenGL();
 	void Setup();
 	void MainLoop();
+	void Update(float deltaTime);
 	void Teardown();
 	void Cleanup();
 
@@ -65,13 +92,21 @@ void MainApp::LoadOpenGL() {
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
 		throw std::runtime_error("GLAD::FAILED_OPENGL_LOAD");
 	}
+
+	glViewport(0, 0, WIDTH, HEIGHT);
 }
 
 // Main Gameloop
 void MainApp::MainLoop() {
 
+	m_Timer.Init();
 	while (!glfwWindowShouldClose(m_Window)) {
+		m_Timer.Update();
 		glfwPollEvents();
+
+		Update(m_Timer.deltaTime);
+
+		glfwSwapBuffers(m_Window);
 	}
 }
 

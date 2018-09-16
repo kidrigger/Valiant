@@ -3,6 +3,7 @@
 #include <sstream>
 #include <vector>
 
+// Shader constructor without geometry shader
 Shader::Shader(const std::string& name, const std::string& vertexShaderPath, const std::string& fragShaderPath) :
 		m_Name(name) {
 
@@ -81,6 +82,7 @@ Shader::Shader(const std::string& name, const std::string& vertexShaderPath, con
 	IntrospectShader();
 }
 
+// Shader constructor with geometry shader
 Shader::Shader(const std::string& name, const std::string& vertexShaderPath, const std::string& geometryShaderPath, const std::string& fragShaderPath) :
 		m_Name(name) {
 
@@ -335,8 +337,8 @@ void Shader::SetVector(const std::string& name, const glm::vec4& value) {
 #endif
 	glUniform4fv(loc, 1, glm::value_ptr(value));
 }
-// ----------------------------
 
+// ----------------------------
 #ifndef NDEBUG
 void Shader::PrintUniformData() const {
 	std::cout << "Shader " + m_Name + ":\n";
@@ -345,3 +347,43 @@ void Shader::PrintUniformData() const {
 	}
 }
 #endif
+
+// Load Shader into the shader cache, and return a pointer.
+Shader* ShaderLoader::Load(const std::string& name, const std::string& vertexShaderPath, const std::string& fragShaderPath) {
+#ifndef NDEBUG
+	if (m_Shaders.count(name)) {
+		throw std::runtime_error("SHDR_LOAD::" + name + "_NOT_UNIQUE");
+	}
+#endif
+	return m_Shaders[name] = new Shader(name, vertexShaderPath, fragShaderPath);
+}
+
+// Gets a loaded shader.
+Shader* ShaderLoader::Get(const std::string& name) {
+#ifndef NDEBUG
+	try {
+		return m_Shaders.at(name);
+	} catch (const std::exception& e) {
+		throw std::runtime_error("SHDR_LOAD::" + std::string(e.what()));
+	}
+#else
+	return m_Shaders[name];
+#endif
+}
+
+// Unloads a loaded shader
+void ShaderLoader::Unload(const std::string& name) {
+#ifndef NDEBUG
+	try {
+		delete m_Shaders.at(name);
+	} catch (const std::exception& e) {
+		throw std::runtime_error("SHDR_LOAD::" + std::string(e.what()));
+	}
+	m_Shaders.erase(name);
+#else
+	delete m_Shaders[name];
+	m_Shaders.erase(name);
+#endif
+}
+
+// ----------------------------

@@ -105,7 +105,7 @@ UseTab:          Always
 ---
 ### C++ specific config ###
 Language:        Cpp
-Standard:        Cpp03
+Standard:        Cpp11
 ---
 ### ObjC specific config ###
 Language:        ObjC

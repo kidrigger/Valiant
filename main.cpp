@@ -20,6 +20,10 @@ int main() {
 void MainApp::Setup() {
 }
 
+// Update function
+void MainApp::Update(float deltaTime) {
+}
+
 // Delete whatever is not important scene.
 void MainApp::Teardown() {
 }

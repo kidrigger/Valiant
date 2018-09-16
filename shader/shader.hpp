@@ -8,6 +8,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
+#include <map>
 #include <vector>
 
 #include <glad/glad.h>
@@ -24,6 +25,9 @@ struct ShaderUniforms {
 	std::string name;
 };
 
+/* Forward Declaration */
+class ShaderLoader;
+
 /*
  * Shader class
  * Wrapper over the GLSL Shader loading and uniform setting methods
@@ -39,12 +43,14 @@ private:
 	void   IntrospectShader();
 	GLuint GetUniformLocation(const std::string& name) const;
 
-public:
 	// Constructor / Loaders. Load the appropriate files and compile into a Shader Programme before launching introspection.
 	Shader(const std::string& name, const std::string& vertexShaderPath, const std::string& fragShaderPath);
 	Shader(const std::string& name, const std::string& vertexShaderPath, const std::string& geometryShaderPath, const std::string& fragShaderPath);
 	~Shader();
 
+	friend class ShaderLoader;
+
+public:
 	// Activate shader for use.
 	void Use();
 
@@ -67,6 +73,27 @@ public:
 #ifndef NDEBUG
 	void PrintUniformData() const;
 #endif
+};
+
+/*
+ * Shader Loader class
+ * Is able to load Shaders and caches the loaded shaders.
+ */
+
+class ShaderLoader {
+	std::map<std::string, Shader*> m_Shaders;
+
+public:
+	Shader* Load(const std::string& name, const std::string& vertexShaderPath, const std::string& fragShaderPath);
+	Shader* Get(const std::string& name);
+	void	Unload(const std::string& name);
+
+	ShaderLoader() {}
+	~ShaderLoader() {
+		for (auto& p : m_Shaders) {
+			delete p.second;
+		}
+	}
 };
 
 #endif /* _SHADER_HPP */
