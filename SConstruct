@@ -22,6 +22,8 @@ Export('env')
 SConscript('#stbi/SCsub')
 SConscript('#glad/SCsub')
 SConscript('#shader/SCsub')
+SConscript('#model/SCsub')
+SConscript('#texture/SCsub')
 
 env.Append(LIBS=['glfw'])
 

@@ -24,6 +24,6 @@ void MainApp::Setup() {
 void MainApp::Update(float deltaTime) {
 }
 
-// Delete whatever is not important scene.
+// Delete whatever is not important.
 void MainApp::Teardown() {
 }

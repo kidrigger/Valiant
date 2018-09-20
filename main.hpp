@@ -8,6 +8,7 @@
 #include <iostream>
 
 #include <chrono>
+#include <model/mesh.hpp>
 #include <shader/shader.hpp>
 
 /*
@@ -43,6 +44,7 @@ class MainApp {
 	GLFWwindow*  m_Window;
 	Time		 m_Timer;
 	ShaderLoader m_ShaderLoader;
+	MeshLoader   m_MeshLoader;
 
 	void
 	InitWindow();
