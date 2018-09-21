@@ -10,6 +10,7 @@
 #include <chrono>
 #include <model/mesh.hpp>
 #include <shader/shader.hpp>
+#include <texture/texture.hpp>
 
 /*
  * Main Application class
@@ -41,10 +42,11 @@ public:
 
 class MainApp {
 
-	GLFWwindow*  m_Window;
-	Time		 m_Timer;
-	ShaderLoader m_ShaderLoader;
-	MeshLoader   m_MeshLoader;
+	GLFWwindow*   m_Window;
+	Time		  m_Timer;
+	ShaderLoader  m_ShaderLoader;
+	TextureLoader m_TextureLoader;
+	MeshLoader	m_MeshLoader;
 
 	void
 	InitWindow();
