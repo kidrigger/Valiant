@@ -22,6 +22,7 @@
 struct ShaderUniforms {
 	GLenum		type;
 	GLint		location;
+	GLsizei		size;
 	std::string name;
 };
 

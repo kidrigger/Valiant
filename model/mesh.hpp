@@ -2,7 +2,7 @@
 #ifndef _MESH_HPP
 #define _MESH_HPP
 
-#include <stdint.h>
+#include <cstdint>
 #include <map>
 #include <string>
 

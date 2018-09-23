@@ -213,6 +213,7 @@ void Shader::IntrospectShader() {
 		m_Uniforms[i] = {
 			type,
 			glGetUniformLocation(m_Shader, name),
+			size,
 			std::string(name)
 		};
 	}
@@ -340,10 +341,34 @@ void Shader::SetVector(const std::string& name, const glm::vec4& value) {
 
 // ----------------------------
 #ifndef NDEBUG
+
+#define CASE_RET(v) \
+	case v:         \
+		return #v
+
+std::string EnumToString(GLenum type) {
+	switch (type) {
+		CASE_RET(GL_FLOAT);
+		CASE_RET(GL_INT);
+		CASE_RET(GL_BOOL);
+		CASE_RET(GL_FLOAT_VEC2);
+		CASE_RET(GL_FLOAT_VEC3);
+		CASE_RET(GL_FLOAT_VEC4);
+		CASE_RET(GL_FLOAT_MAT2);
+		CASE_RET(GL_FLOAT_MAT3);
+		CASE_RET(GL_FLOAT_MAT4);
+		CASE_RET(GL_SAMPLER_1D);
+		CASE_RET(GL_SAMPLER_2D);
+		CASE_RET(GL_SAMPLER_3D);
+		CASE_RET(GL_SAMPLER_CUBE);
+		default: return "ERR";
+	}
+}
+
 void Shader::PrintUniformData() const {
 	std::cout << "Shader " + m_Name + ":\n";
 	for (const auto& unif : m_Uniforms) {
-		std::cout << '\t' << unif.name << std::endl;
+		std::cout << '\t' << unif.name << " : " << EnumToString(unif.type) << std::endl;
 	}
 }
 #endif

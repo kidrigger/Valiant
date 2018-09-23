@@ -14,7 +14,7 @@ def add_sources(self, sources, filetype):
 env.sources = sources
 env.__class__.add_sources = add_sources
 
-env.Append(CXXFLAGS=['-std=c++14'])
+env.Append(CXXFLAGS=['-std=c++14','-g'])
 env.Append(CPPPATH=['#'])
 
 Export('env')
@@ -24,6 +24,7 @@ SConscript('#glad/SCsub')
 SConscript('#shader/SCsub')
 SConscript('#model/SCsub')
 SConscript('#texture/SCsub')
+SConscript('#material/SCsub')
 
 env.Append(LIBS=['glfw'])
 
